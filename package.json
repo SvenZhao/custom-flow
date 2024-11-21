@@ -2,12 +2,18 @@
   "name": "custom-flow",
   "displayName": "流式处理",
   "description": "一个允许用户自定义操作流，流式处理文本的 VSCode 插件。",
+  "publisher": "svenzhao",
+  "icon": "images/logo.png",
   "version": "0.0.1",
   "engines": {
-    "vscode": "^1.95.0"
+    "vscode": "^1.50.0"
   },
   "categories": [
     "Other"
+  ],
+  "keywords": [
+    "flow",
+    "tools"
   ],
   "activationEvents": [
     "onStartupFinished"
@@ -129,7 +135,9 @@
     "pretest": "npm run compile-tests && npm run compile && npm run lint",
     "lint": "eslint src",
     "test": "vscode-test",
-    "docs": "typedoc --out docs/ src/operations/*.ts"
+    "docs": "typedoc --out docs/ src/operations/*.ts",
+    "release": "standard-version",
+    "publish": "npm run release && vsce publish"
   },
   "devDependencies": {
     "@types/lodash": "^4.17.13",
