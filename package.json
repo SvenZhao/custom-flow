@@ -4,7 +4,7 @@
   "description": "一个允许用户自定义操作流，流式处理文本的 VSCode 插件。",
   "publisher": "svenzhao",
   "icon": "images/logo.png",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "engines": {
     "vscode": "^1.50.0"
   },
@@ -150,6 +150,7 @@
   },
   "dependencies": {
     "dayjs": "^1.11.13",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "standard-version": "^9.5.0"
   }
 }
