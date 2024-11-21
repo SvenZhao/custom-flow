@@ -1,16 +1,26 @@
 import dayjs from 'dayjs';
 
-// 获取当前时间戳（毫秒）
+/**
+ * 获取当前时间戳（毫秒）
+ * @returns 返回当前时间戳（毫秒）
+ */
 export function getCurrentTimestampMillis(): string {
     return dayjs().valueOf().toString(); // 返回当前时间戳（毫秒）
 }
 
-// 获取当前时间戳（秒）
+/**
+ * 获取当前时间戳（秒）
+ * @returns 返回当前时间戳（秒）
+ */
 export function getCurrentTimestampSeconds(): string {
     return dayjs().unix().toString(); // 返回当前时间戳（秒）
 }
 
-// 将日期字符串转换为时间戳（毫秒）
+/**
+ * 将日期字符串转换为时间戳（毫秒）
+ * @param date 日期字符串
+ * @returns 返回时间戳（毫秒），如果转换失败，返回原文本
+ */
 export function dateToTimestampMillis(date: string): string {
     try {
         return dayjs(date).valueOf().toString(); // 返回日期对应的时间戳（毫秒）
@@ -19,7 +29,11 @@ export function dateToTimestampMillis(date: string): string {
     }
 }
 
-// 将时间戳（毫秒）转换为日期
+/**
+ * 将时间戳（毫秒）转换为日期字符串
+ * @param timestamp 时间戳（毫秒）
+ * @returns 返回对应的日期字符串，如果转换失败，返回原时间戳
+ */
 export function timestampMillisToDate(timestamp: string): string {
     try {
         return dayjs(Number(timestamp)).format('YYYY-MM-DD HH:mm:ss'); // 将时间戳（毫秒）转换为日期
@@ -28,7 +42,11 @@ export function timestampMillisToDate(timestamp: string): string {
     }
 }
 
-// 将时间戳（秒）转换为日期
+/**
+ * 将时间戳（秒）转换为日期字符串
+ * @param timestamp 时间戳（秒）
+ * @returns 返回对应的日期字符串，如果转换失败，返回原时间戳
+ */
 export function timestampSecondsToDate(timestamp: string): string {
     try {
         return dayjs.unix(Number(timestamp)).format('YYYY-MM-DD HH:mm:ss'); // 将时间戳（秒）转换为日期
