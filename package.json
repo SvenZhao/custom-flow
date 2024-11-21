@@ -27,7 +27,31 @@
         "customFlow.operations": {
           "type": "array",
           "description": "用户自定义操作流程的列表，每个操作包括一个名称和一系列步骤。",
-          "default": [],
+          "default": [
+            {
+              "name": "默认可删除 转换成大写",
+              "steps": [
+                {
+                  "name": "toUpperCase",
+                  "params": {}
+                }
+              ]
+            },
+            {
+              "name": "默认可删除  乘3除2 到剪贴板",
+              "steps": [
+                {
+                  "name": "divide",
+                  "params": 3
+                },
+                {
+                  "name": "multiply",
+                  "params": 2
+                }
+              ],
+              "resultAction": "clipboard"
+            }
+          ],
           "items": {
             "type": "object",
             "properties": {

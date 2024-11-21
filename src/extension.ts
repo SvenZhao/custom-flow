@@ -10,7 +10,7 @@ export function activate(context: vscode.ExtensionContext) {
   // 将命令的清理工作添加到上下文中，插件停用时自动移除
   context.subscriptions.push(disposable);
 
-  vscode.window.showInformationMessage('CustomFlow 插件已激活。');
+  vscode.window.showInformationMessage('CustomFlow 已启动');
 }
 
 // 执行自定义操作的主逻辑
@@ -110,12 +110,17 @@ interface ICustomOperation {
   resultAction?: string; // 结果动作：可以是 'clipboard' 或 'replace'
 }
 
+const DEFAULT_OPERATIONS = [
+  { "name": "URL编码", "steps": [{ "name": "urlencode", "params": {} }] },
+  { "name": "URL解码", "steps": [{ "name": "urldecode", "params": {} }] }
+];
 // 获取用户配置的操作
 function getUserOperations(): ICustomOperation[] {
   const config = vscode.workspace.getConfiguration('customFlow');
+
   const operations = config.get<ICustomOperation[]>('operations') || [];
   // 返回配置的操作
-  return operations.map(op => ({
+  return [...DEFAULT_OPERATIONS, ...operations].map(op => ({
     ...op,
     steps: op.steps.map(step => ({
       name: step.name,
