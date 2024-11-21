@@ -16,10 +16,11 @@ export function trim(text: string): string {
   return text.trim();
 }
 
-// 定义操作的映射
-export default {
+const operations = {
   uppercase,
   lowercase,
   reverse,
   trim,
 };
+
+export default operations;

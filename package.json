@@ -1,7 +1,7 @@
 {
-  "name": "customflow",
-  "displayName": "CustomFlow",
-  "description": "Allow users to define custom flow operations.",
+  "name": "custom-flow",
+  "displayName": "流式处理",
+  "description": "一个允许用户自定义操作流，流式处理文本的 VSCode 插件。",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.95.0"
@@ -14,12 +14,19 @@
   ],
   "main": "./dist/extension.js",
   "contributes": {
+    "keybindings": [
+      {
+        "command": "customFlow.execute",
+        "key": "ctrl+shift+cmd+x",
+        "mac": "cmd+shift+ctrl+x"
+      }
+    ],
     "configuration": {
       "type": "object",
       "properties": {
         "customFlow.operations": {
           "type": "array",
-          "description": "A list of user-defined operation flows, each containing a name and a list of steps to apply.",
+          "description": "用户自定义操作流程的列表，每个操作包括一个名称和一系列步骤。",
           "default": []
         }
       }
@@ -36,7 +43,8 @@
     "commands": [
       {
         "command": "customFlow.execute",
-        "title": "Run Custom Operation"
+        "title": "执行流式处理",
+        "category": "CustomFlow"
       }
     ]
   },
