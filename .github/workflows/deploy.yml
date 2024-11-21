@@ -1,0 +1,31 @@
+name: Deploy Docs to GitHub Pages
+
+on:
+  push:
+    branches:
+      - master  # 可以根据需要选择合适的分支
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'  # 这里可以指定你项目的 Node.js 版本
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build documentation
+        run: npm run docs  # 确保你的 `package.json` 中有 `docs` 命令来生成文档
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs  # 确保这是你生成文档的目录
