@@ -27,7 +27,54 @@
         "customFlow.operations": {
           "type": "array",
           "description": "用户自定义操作流程的列表，每个操作包括一个名称和一系列步骤。",
-          "default": []
+          "default": [],
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "操作名称，选择预定义的操作类型。"
+              },
+              "steps": {
+                "type": "array",
+                "description": "操作的步骤，每个步骤包含名称和可选参数。",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "description": "步骤方法名称 例如 multiply。去文档查看可用的步骤方法。"
+                    },
+                    "params": {
+                      "type": [
+                        "object",
+                        "string",
+                        "boolean",
+                        "number"
+                      ],
+                      "description": "步骤所需的参数，例如 'multiply' 步骤中，输入 3 表示乘以 3。"
+                    }
+                  },
+                  "required": [
+                    "name"
+                  ]
+                }
+              },
+              "resultAction": {
+                "type": "string",
+                "enum": [
+                  "clipboard",
+                  "replace"
+                ],
+                "default": "replace",
+                "description": "操作完成后的结果动作，'clipboard' 或 'replace'。"
+              }
+            },
+            "required": [
+              "name",
+              "steps"
+            ]
+          }
         }
       }
     },
@@ -58,7 +105,7 @@
     "pretest": "npm run compile-tests && npm run compile && npm run lint",
     "lint": "eslint src",
     "test": "vscode-test",
-    "docs":"typedoc --out docs/ src/operations/*.ts"
+    "docs": "typedoc --out docs/ src/operations/*.ts"
   },
   "devDependencies": {
     "@types/lodash": "^4.17.13",
