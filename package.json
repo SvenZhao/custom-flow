@@ -1,7 +1,7 @@
 {
   "name": "customflow",
-  "displayName": "customFlow",
-  "description": "customFlow",
+  "displayName": "CustomFlow",
+  "description": "Allow users to define custom flow operations.",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.95.0"
@@ -9,13 +9,34 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "main": "./dist/extension.js",
   "contributes": {
+    "configuration": {
+      "type": "object",
+      "properties": {
+        "customFlow.operations": {
+          "type": "array",
+          "description": "A list of user-defined operation flows, each containing a name and a list of steps to apply.",
+          "default": []
+        }
+      }
+    },
+    "menus": {
+      "editor/context": [
+        {
+          "command": "customFlow.execute",
+          "group": "navigation",
+          "when": "editorTextFocus"
+        }
+      ]
+    },
     "commands": [
       {
-        "command": "customflow.helloWorld",
-        "title": "Hello World"
+        "command": "customFlow.execute",
+        "title": "Run Custom Operation"
       }
     ]
   },
@@ -31,17 +52,14 @@
     "test": "vscode-test"
   },
   "devDependencies": {
+    "@types/lodash": "^4.17.13",
     "@types/vscode": "^1.95.0",
-    "@types/mocha": "^10.0.9",
-    "@types/node": "20.x",
-    "@typescript-eslint/eslint-plugin": "^8.10.0",
-    "@typescript-eslint/parser": "^8.7.0",
-    "eslint": "^9.13.0",
-    "typescript": "^5.6.3",
     "ts-loader": "^9.5.1",
+    "typescript": "^5.6.3",
     "webpack": "^5.95.0",
-    "webpack-cli": "^5.1.4",
-    "@vscode/test-cli": "^0.0.10",
-    "@vscode/test-electron": "^2.4.1"
+    "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21"
   }
 }

@@ -1,26 +1,64 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import operations from './operations/index';
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
+  const disposable = vscode.commands.registerCommand('customFlow.execute', async () => {
+    const config = vscode.workspace.getConfiguration('customFlow');
+    const userOperations = config.get('operations') as { name: string; steps: string[]; resultAction?: string }[] || [];
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "customflow" is now active!');
+    if (!userOperations.length) {
+      return vscode.window.showWarningMessage('No custom operations defined. Please configure customFlow.operations in settings.');
+    }
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	const disposable = vscode.commands.registerCommand('customflow.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from customFlow!');
-	});
+    // 弹出用户定义操作的选择列表
+    const selectedOperation = await vscode.window.showQuickPick(
+      userOperations.map((op) => op.name),
+      { placeHolder: 'Select an operation to run:' }
+    );
 
-	context.subscriptions.push(disposable);
+    if (!selectedOperation) {
+      return; // 用户取消选择
+    }
+
+    const operation = userOperations.find((op) => op.name === selectedOperation);
+    if (!operation) {
+      return vscode.window.showErrorMessage(`Operation "${selectedOperation}" not found.`);
+    }
+
+    const editor = vscode.window.activeTextEditor;
+    if (!editor || editor.selection.isEmpty) {
+      return vscode.window.showErrorMessage('Please select some text to apply the operation.');
+    }
+
+    const selectedText = editor.document.getText(editor.selection);
+    let processedText = selectedText;
+
+    // 执行步骤
+    for (const step of operation.steps) {
+      const func = operations[step as keyof typeof operations];
+      if (!func) {
+        return vscode.window.showErrorMessage(`Unknown step: "${step}".`);
+      }
+      processedText = func(processedText);
+    }
+
+    // 根据 resultAction 处理结果
+    switch (operation.resultAction) {
+      case 'clipboard':
+        await vscode.env.clipboard.writeText(processedText);
+        vscode.window.showInformationMessage(`"${selectedOperation}" applied. Result copied to clipboard.`);
+        break;
+
+      case 'replace':
+      default:
+        await editor.edit(editBuilder => {
+          editBuilder.replace(editor.selection, processedText);
+        });
+        vscode.window.showInformationMessage(`"${selectedOperation}" applied. Text replaced.`);
+    }
+  });
+
+  context.subscriptions.push(disposable);
 }
 
-// This method is called when your extension is deactivated
 export function deactivate() {}
