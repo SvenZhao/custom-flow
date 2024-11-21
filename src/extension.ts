@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
-import operations from './operations';
 import { flow, get, find } from 'lodash';
+import operations from './operations';
 
 // 插件激活时调用的函数
 export function activate(context: vscode.ExtensionContext) {
@@ -15,33 +15,24 @@ export function activate(context: vscode.ExtensionContext) {
 
 // 执行自定义操作的主逻辑
 async function executeCustomFlow() {
-  // 获取用户配置的操作
   const userOperations = getUserOperations();
 
-  // 如果没有定义任何操作，显示警告信息
   if (!userOperations.length) {
     return vscode.window.showWarningMessage('没有定义自定义操作。请在设置中配置 customFlow.operations。');
   }
 
-  // 弹出操作选择框，允许用户选择要运行的操作
   const selectedOperation = await selectOperation(userOperations);
-  if (!selectedOperation) return; // 用户取消选择
+  if (!selectedOperation) return;
 
-  // 查找用户选择的操作
   const operation = find(userOperations, { name: selectedOperation });
   if (!operation) {
-    // 如果没有找到操作，显示错误信息
     return vscode.window.showErrorMessage(`找不到操作 "${selectedOperation}"。`);
   }
-
-  // 获取当前编辑器中选中的文本
   const selectedText = await getSelectedText();
-  if (!selectedText) return; // 如果没有选择文本，退出
-
-  // 根据操作步骤处理选中的文本
+  if (!selectedText) return;
+  // 将操作步骤和参数传递给 applyStepsToText
   const processedText = await applyStepsToText(selectedText, operation.steps);
 
-  // 根据配置的结果动作处理处理后的文本（如复制到剪贴板或替换选中的文本）
   await handleResult(processedText, operation.resultAction);
 }
 
@@ -66,21 +57,24 @@ async function getSelectedText(): Promise<string | undefined> {
 }
 
 // 使用 lodash 的 flow 来组合步骤
-async function applyStepsToText(text: string, steps: string[]): Promise<string> {
-  // 将每个步骤的操作函数映射到一个数组
+async function applyStepsToText(text: string, steps: { name: string, params?: any }[]): Promise<string> {
   const funcs = steps.map(step => {
-    const func = get(operations, step); // 使用 lodash 的 get 方法，简化查找步骤
+    const func = get(operations, step.name);
     if (!func) {
-      vscode.window.showErrorMessage(`未知的步骤: "${step}"。`);
-      return (text: string) => text; // 返回原文本
+      vscode.window.showErrorMessage(`未知的步骤: "${step.name}"。`);
+      return (text: string) => text; // 如果步骤找不到，返回原文本
     }
-    return func;
+
+    // 如果有参数，传递给步骤函数
+    return (text: string) => {
+      if (step.params === undefined || step.params === null) {
+        return func(text); // 如果没有传递参数，直接调用无参函数
+      }
+      return func(text, step.params); // 否则传递 params
+    };
   });
 
-  // 使用 lodash 的 flow 来将多个函数按顺序组合成一个新的函数
   const pipeline = flow(funcs);
-
-  // 执行管道，返回处理后的文本
   return pipeline(text);
 }
 
@@ -108,16 +102,24 @@ async function handleResult(processedText: string, resultAction?: string) {
   }
 }
 
+
 // 定义操作配置的类型
 interface ICustomOperation {
   name: string; // 操作名称
-  steps: string[]; // 操作步骤
+  steps: { name: string, params?: any }[]; // 操作步骤，可以包含任意参数
   resultAction?: string; // 结果动作：可以是 'clipboard' 或 'replace'
 }
 
 // 获取用户配置的操作
 function getUserOperations(): ICustomOperation[] {
   const config = vscode.workspace.getConfiguration('customFlow');
-  // 返回自定义的操作配置，若无则返回空数组
-  return config.get('operations') as ICustomOperation[] || [];
+  const operations = config.get<ICustomOperation[]>('operations') || [];
+  // 返回配置的操作
+  return operations.map(op => ({
+    ...op,
+    steps: op.steps.map(step => ({
+      name: step.name,
+      params: step.params || null,  // 如果没有传递 params，默认为 null
+    }))
+  }));
 }

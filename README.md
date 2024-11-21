@@ -1,71 +1,93 @@
-# customflow README
+# CustomFlow - VSCode 插件
 
-This is the README for your extension "customflow". After writing up a brief description, we recommend including the following sections.
+**CustomFlow** 是一个允许用户自定义操作流，流式处理文本的 VSCode 插件。用户可以配置一系列文本操作步骤，并通过快捷键或命令快速执行，支持多种文本处理功能，包括大小写转换、空格去除、时间戳转换等。
 
-## Features
+## 功能
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+- 支持多个内置的文本处理函数：大小写转换、去除空格、加减乘除、Base64 编解码等。
+- 支持时间戳操作：将日期转换为时间戳，或将时间戳转换为日期。
+- 支持用户自定义操作步骤，并按顺序组合成操作流。
+- 支持将处理后的文本复制到剪贴板或替换编辑器中的选中文本。
 
-For example if there is an image subfolder under your extension project workspace:
+## 安装
 
-\!\[feature X\]\(images/feature-x.png\)
+1. 打开 VSCode 编辑器。
+2. 按 `Ctrl+P` (或 `Cmd+P` 在 Mac 上)。
+3. 输入并执行命令 `ext install customFlow`。
+4. 或者从 [VSCode 插件市场](https://marketplace.visualstudio.com) 搜索 `CustomFlow` 安装插件。
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+## 配置
 
-## Requirements
+插件提供了一个可配置的操作列表，可以在 VSCode 设置中进行配置。打开设置文件并添加如下内容：
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+### 示例配置
 
-## Extension Settings
+```json
+{
+  "customFlow.operations": [
+    {
+      "name": "Text Operations",
+      "steps": [
+        { "name": "uppercase", "params": {} },
+        { "name": "reverse", "params": {} }
+      ]
+    },
+    {
+      "name": "Timestamp Operations",
+      "steps": [
+        { "name": "getCurrentTimestampMillis", "params": {} },
+        { "name": "dateToTimestampMillis", "params": { "date": "2024-11-21" } },
+        { "name": "timestampMillisToDate", "params": { "timestamp": "1711173123000" } }
+      ]
+    }
+  ]
+}
+```
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+### 配置项
 
-For example:
+- **`customFlow.operations`**: 一个操作步骤列表，用户可以定义多个操作。每个操作包含多个步骤，每个步骤可以指定一个函数和参数。
+- **`params`**: 可以为空或指定对象，包含该步骤所需的参数。
 
-This extension contributes the following settings:
+## 使用
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+- 使用快捷键 `Ctrl+Shift+Cmd+X`（Windows/Linux: `Ctrl+Shift+Cmd+X`，Mac: `Cmd+Shift+Ctrl+X`）触发插件。
+- 在编辑器中选中文本，插件会弹出操作选择框，允许用户选择要执行的操作。
+- 执行操作后，处理后的文本将根据配置的动作进行处理：可以替换选中的文本或将结果复制到剪贴板。
 
-## Known Issues
+## 支持的操作
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+### 文本操作
 
-## Release Notes
+| 操作名称     | 描述               | 参数示例  |
+|--------------|--------------------|-----------|
+| **uppercase** | 将文本转换为大写   | 无        |
+| **lowercase** | 将文本转换为小写   | 无        |
+| **reverse**   | 反转文本顺序       | 无        |
+| **trim**      | 去掉文本两端的空白字符 | 无     |
 
-Users appreciate release notes as you update your extension.
+### 数字操作
 
-### 1.0.0
+| 操作名称     | 描述               | 参数示例  |
+|--------------|--------------------|-----------|
+| **add**       | 对选中的文本（数字）进行加法操作 | `num: 10` |
+| **subtract**  | 对选中的文本（数字）进行减法操作 | `num: 5`  |
+| **multiply**  | 对选中的文本（数字）进行乘法操作 | `num: 2`  |
+| **divide**    | 对选中的文本（数字）进行除法操作 | `num: 2`  |
 
-Initial release of ...
+### 时间戳操作
 
-### 1.0.1
+| 操作名称                       | 描述                          | 参数示例                 |
+|----------------------------------|-------------------------------|--------------------------|
+| **getCurrentTimestampMillis**    | 获取当前时间戳（毫秒）        | 无                       |
+| **getCurrentTimestampSeconds**   | 获取当前时间戳（秒）          | 无                       |
+| **dateToTimestampMillis**        | 将日期转换为时间戳（毫秒）    | `date: "2024-11-21"`      |
+| **timestampMillisToDate**        | 将时间戳（毫秒）转换为日期    | `timestamp: 1711173123000`|
+| **timestampSecondsToDate**       | 将时间戳（秒）转换为日期     | `timestamp: 1711173123`   |
 
-Fixed issue #.
+### 编码与解码操作
 
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+| 操作名称     | 描述               | 参数示例  |
+|--------------|--------------------|-----------|
+| **base64encode** | 将文本编码为 Base64 | 无        |
+| **base64decode** | 将 Base64 编码的文本解码 | 无    |

@@ -68,6 +68,7 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
+    "dayjs": "^1.11.13",
     "lodash": "^4.17.21"
   }
 }

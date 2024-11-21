@@ -1,26 +1,7 @@
-import { upperCase, lowerCase } from 'lodash';
+import math from './math';
+import times from './times';
+import encoding from './encoding';
 
-export function uppercase(text: string): string {
-  return upperCase(text);
-}
 
-export function lowercase(text: string): string {
-  return lowerCase(text);
-}
-
-export function reverse(text: string): string {
-  return text.split('').reverse().join('');
-}
-
-export function trim(text: string): string {
-  return text.trim();
-}
-
-const operations = {
-  uppercase,
-  lowercase,
-  reverse,
-  trim,
-};
-
-export default operations;
+// 操作集合
+const operations = { ...math, ...times, ...encoding }; export default operations;
