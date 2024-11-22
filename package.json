@@ -125,6 +125,10 @@
       }
     ]
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SvenZhao/custom-flow"
+  },
   "scripts": {
     "vscode:prepublish": "npm run package",
     "compile": "webpack",
