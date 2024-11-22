@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { flow, get, find } from 'lodash';
 import operations from './operations';
+import { showErrorMessage } from './utils';
 
 // 插件激活时调用的函数
 export function activate(context: vscode.ExtensionContext) {
@@ -26,21 +27,21 @@ async function executeCustomFlow() {
 
     const operation = find(userOperations, { name: selectedOperation });
     if (!operation) {
-      return vscode.window.showErrorMessage(`找不到操作 "${selectedOperation}"。`);
+      return showErrorMessage(`找不到操作 "${selectedOperation}"。`);
     }
     const selectedText = await getSelectedText()
     if (operation.needSelect && !selectedText) {
-      return vscode.window.showErrorMessage('请选中文本后再执行操作。');
+      return showErrorMessage('请选中文本后再执行操作。');
     }
     // 将操作步骤和参数传递给 applyStepsToText
-    const processedText = await applyStepsToText(selectedText, operation.steps);
+    const processedText = await applyStepsToText(selectedText, operation);
     await handleResult(processedText, operation.resultAction);
   }
   catch (e) {
     // 统一处理并打印错误信息
     const errorMessage = e instanceof Error ? e.message : JSON.stringify(e);
-    console.error('CustomFlow Error:', e); // 打印完整错误供调试
-    return vscode.window.showErrorMessage(`CustomFlow 执行失败 可以再调试工具插件具体异常: ${errorMessage}`);
+    console.error('custom-flow Error:', e); // 打印完整错误供调试
+    return showErrorMessage(`执行失败 可以再调试工具插件具体异常: ${errorMessage}`);
   }
 }
 
@@ -57,11 +58,11 @@ async function getSelectedText(): Promise<string | undefined> {
 }
 
 // 使用 lodash 的 flow 来组合步骤
-async function applyStepsToText(text: string | undefined, steps: { name: string, params?: any }[]): Promise<string> {
-  const funcs = steps.map(step => {
+async function applyStepsToText(text: string | undefined, operation: ICustomOperation): Promise<string> {
+  const funcs = operation.steps.map(step => {
     const func = get(operations, step.name);
     if (!func) {
-      vscode.window.showErrorMessage(`未知的步骤: "${step.name}"。`);
+      showErrorMessage(`[${operation.name}] ["${step.name}"]配置项不存在`);
       return (text: string) => text; // 如果步骤找不到，返回原文本
     }
 

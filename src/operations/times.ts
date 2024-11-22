@@ -26,7 +26,7 @@ export function timestampToDate(timestamp: string, format: string = 'YYYY-MM-DD 
  * @param unit 时间戳单位，'ms' 为毫秒，'s' 为秒
  * @returns 返回当前时间的时间戳（根据单位）
  */
-export function currentTimestamp(_: undefined, unit: 'ms' | 's' = 'ms'): string {
+export function nowTimestamp(_: undefined, unit: 'ms' | 's' = 'ms'): string {
     const timestamp = dayjs().valueOf(); // 默认是毫秒
     return unit === 's' ? (timestamp / 1000).toString() : timestamp.toString(); // 根据 unit 返回毫秒或秒
 }
@@ -35,5 +35,5 @@ export function currentTimestamp(_: undefined, unit: 'ms' | 's' = 'ms'): string 
 export default {
     dateToTimestamp,
     timestampToDate,
-    currentTimestamp
+    nowTimestamp
 };

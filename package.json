@@ -205,6 +205,7 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.17.13",
+    "@types/mockjs": "^1.0.10",
     "@types/vscode": "^1.50.0",
     "ts-loader": "^9.5.1",
     "typedoc": "^0.26.11",
@@ -215,6 +216,7 @@
   "dependencies": {
     "dayjs": "^1.11.13",
     "lodash": "^4.17.21",
+    "mockjs": "^1.1.0",
     "standard-version": "^9.5.0"
   }
 }
