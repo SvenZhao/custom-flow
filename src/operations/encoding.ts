@@ -13,11 +13,7 @@ export function base64encode(text: string): string {
  * @returns 返回解码后的文本，如果解码失败返回空字符串
  */
 export function base64decode(base64Text: string): string {
-    try {
-        return Buffer.from(base64Text, 'base64').toString('utf-8');
-    } catch (e) {
-        return ''; // 解码错误返回空字符串
-    }
+    return Buffer.from(base64Text, 'base64').toString('utf-8');
 }
 
 /**
@@ -35,11 +31,7 @@ export function urlencode(text: string): string {
  * @returns 返回解码后的字符串，如果解码失败返回空字符串
  */
 export function urldecode(encodedText: string): string {
-    try {
-        return decodeURIComponent(encodedText);
-    } catch (e) {
-        return ''; // 解码错误返回空字符串
-    }
+    return decodeURIComponent(encodedText);
 }
 /**
  * UTF-8 编码
@@ -56,11 +48,7 @@ export function utf8encode(text: string): string {
  * @returns 返回解码后的文本，如果解码失败返回空字符串
  */
 export function utf8decode(encodedText: string): string {
-    try {
-        return decodeURIComponent(escape(encodedText));
-    } catch (e) {
-        return ''; // 解码错误返回空字符串
-    }
+    return decodeURIComponent(escape(encodedText));
 }
 
 /**
@@ -78,11 +66,8 @@ export function hexencode(text: string): string {
  * @returns 返回解码后的文本，如果解码失败返回空字符串
  */
 export function hexdecode(hexText: string): string {
-    try {
-        return Buffer.from(hexText, 'hex').toString('utf-8');
-    } catch (e) {
-        return ''; // 解码错误返回空字符串
-    }
+    return Buffer.from(hexText, 'hex').toString('utf-8');
+
 }
 
 /**

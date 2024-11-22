@@ -15,49 +15,49 @@ export function activate(context: vscode.ExtensionContext) {
 
 // 执行自定义操作的主逻辑
 async function executeCustomFlow() {
-  const userOperations = getUserOperations();
+  try {
+    const userOperations = getUserOperations();
+    if (!userOperations.length) {
+      return vscode.window.showWarningMessage('没有定义自定义操作。请在设置中配置 customFlow.operations。');
+    }
 
-  if (!userOperations.length) {
-    return vscode.window.showWarningMessage('没有定义自定义操作。请在设置中配置 customFlow.operations。');
+    const selectedOperation = await selectOperation(userOperations);
+    if (!selectedOperation) return;
+
+    const operation = find(userOperations, { name: selectedOperation });
+    if (!operation) {
+      return vscode.window.showErrorMessage(`找不到操作 "${selectedOperation}"。`);
+    }
+    const selectedText = await getSelectedText()
+    if (operation.needSelect && !selectedText) {
+      return vscode.window.showErrorMessage('请选中文本后再执行操作。');
+    }
+    // 将操作步骤和参数传递给 applyStepsToText
+    const processedText = await applyStepsToText(selectedText, operation.steps);
+    await handleResult(processedText, operation.resultAction);
   }
-
-  const selectedOperation = await selectOperation(userOperations);
-  if (!selectedOperation) return;
-
-  const operation = find(userOperations, { name: selectedOperation });
-  if (!operation) {
-    return vscode.window.showErrorMessage(`找不到操作 "${selectedOperation}"。`);
+  catch (e) {
+    // 统一处理并打印错误信息
+    const errorMessage = e instanceof Error ? e.message : JSON.stringify(e);
+    console.error('CustomFlow Error:', e); // 打印完整错误供调试
+    return vscode.window.showErrorMessage(`CustomFlow 执行失败 可以再调试工具插件具体异常: ${errorMessage}`);
   }
-  const selectedText = await getSelectedText();
-  if (!selectedText) return;
-  // 将操作步骤和参数传递给 applyStepsToText
-  const processedText = await applyStepsToText(selectedText, operation.steps);
-
-  await handleResult(processedText, operation.resultAction);
 }
 
 // 显示操作选择框，返回用户选择的操作名称
 async function selectOperation(userOperations: { name: string }[]): Promise<string | undefined> {
-  return vscode.window.showQuickPick(
-    userOperations.map((op) => op.name), // 显示所有操作的名称
-    { placeHolder: '请选择要执行的操作：' } // 提示文字
-  );
+  return vscode.window.showQuickPick(userOperations.map((op) => op.name), { placeHolder: '请选择要执行的操作：' });
 }
 
 // 获取当前选中的文本
 async function getSelectedText(): Promise<string | undefined> {
   const editor = vscode.window.activeTextEditor;
-  if (!editor || editor.selection.isEmpty) {
-    // 如果没有打开编辑器或没有选中文本，提示用户
-    vscode.window.showErrorMessage('请选中文本后再执行操作。');
-    return undefined;
-  }
   // 返回选中的文本
-  return editor.document.getText(editor.selection);
+  return editor?.document.getText(editor.selection);
 }
 
 // 使用 lodash 的 flow 来组合步骤
-async function applyStepsToText(text: string, steps: { name: string, params?: any }[]): Promise<string> {
+async function applyStepsToText(text: string | undefined, steps: { name: string, params?: any }[]): Promise<string> {
   const funcs = steps.map(step => {
     const func = get(operations, step.name);
     if (!func) {
@@ -103,24 +103,40 @@ async function handleResult(processedText: string, resultAction?: string) {
 
 
 // 定义操作配置的类型
+enum EresultAction {
+  /** 到剪贴板 */
+  clipboard = 'clipboard',
+  /** 替换 默认 */
+  replace = 'replace'
+}
+interface IStep {
+  /**步骤名称 */
+  name: string,
+  /**步骤参数 */
+  params?: any
+}
+
 interface ICustomOperation {
-  name: string; // 操作名称
-  steps: { name: string, params?: any }[]; // 操作步骤，可以包含任意参数
-  resultAction?: string; // 结果动作：可以是 'clipboard' 或 'replace'
+  /**操作名称 */
+  name: string;
+  /** 需要选中文本 默认需要 */
+  needSelect?: boolean;
+  /** 操作步骤 */
+  steps: IStep[];
+  /** 结果展示方式 */
+  resultAction?: EresultAction;
 }
 
 
 // 获取用户配置的操作
 function getUserOperations(): ICustomOperation[] {
   const config = vscode.workspace.getConfiguration('customFlow');
-
   const operations = config.get<ICustomOperation[]>('operations') || [];
   // 返回配置的操作
   return operations.map(op => ({
+    /**默认需要选中 */
+    needSelect: true,
     ...op,
-    steps: op.steps.map(step => ({
-      name: step.name,
-      params: step.params || null,  // 如果没有传递 params，默认为 null
-    }))
+    steps: op.steps.map(step => ({ name: step.name, params: step.params || null, }))
   }));
 }

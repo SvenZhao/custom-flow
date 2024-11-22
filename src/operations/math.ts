@@ -6,9 +6,6 @@
  */
 export function add(text: string, num: number): string {
     const numericValue = parseFloat(text);
-    if (isNaN(numericValue) || typeof num !== 'number') {
-        return text; // 如果文本不能转换为数字，或参数不合法，返回原文本
-    }
     return (numericValue + num).toString();
 }
 
@@ -20,9 +17,6 @@ export function add(text: string, num: number): string {
  */
 export function subtract(text: string, num: number): string {
     const numericValue = parseFloat(text);
-    if (isNaN(numericValue) || typeof num !== 'number') {
-        return text; // 如果文本不能转换为数字，或参数不合法，返回原文本
-    }
     return (numericValue - num).toString();
 }
 
@@ -34,9 +28,6 @@ export function subtract(text: string, num: number): string {
  */
 export function multiply(text: string, num: number): string {
     const numericValue = parseFloat(text);
-    if (isNaN(numericValue) || typeof num !== 'number') {
-        return text; // 如果文本不能转换为数字，或参数不合法，返回原文本
-    }
     return (numericValue * num).toString();
 }
 
@@ -48,9 +39,6 @@ export function multiply(text: string, num: number): string {
  */
 export function divide(text: string, num: number): string {
     const numericValue = parseFloat(text);
-    if (isNaN(numericValue) || typeof num !== 'number' || num === 0) {
-        return text; // 如果文本不能转换为数字，参数不合法或除数为零，返回原文本
-    }
     return (numericValue / num).toString();
 }
 /**
@@ -61,9 +49,6 @@ export function divide(text: string, num: number): string {
  */
 export function modulo(text: string, divisor: number): string {
     const numericValue = parseFloat(text);
-    if (isNaN(numericValue) || typeof divisor !== 'number' || divisor === 0) {
-        return text; // 如果文本不能转换为数字，参数不合法或除数为零，返回原文本
-    }
     return (numericValue % divisor).toString();
 }
 
@@ -74,9 +59,6 @@ export function modulo(text: string, divisor: number): string {
  */
 export function floor(text: string): string {
     const numericValue = parseFloat(text);
-    if (isNaN(numericValue)) {
-        return text; // 如果文本不能转换为数字，返回原文本
-    }
     return Math.floor(numericValue).toString();
 }
 
@@ -87,9 +69,6 @@ export function floor(text: string): string {
  */
 export function ceil(text: string): string {
     const numericValue = parseFloat(text);
-    if (isNaN(numericValue)) {
-        return text; // 如果文本不能转换为数字，返回原文本
-    }
     return Math.ceil(numericValue).toString();
 }
 
@@ -100,9 +79,6 @@ export function ceil(text: string): string {
  */
 export function round(text: string): string {
     const numericValue = parseFloat(text);
-    if (isNaN(numericValue)) {
-        return text; // 如果文本不能转换为数字，返回原文本
-    }
     return Math.round(numericValue).toString();
 }
 
@@ -113,9 +89,6 @@ export function round(text: string): string {
  */
 export function absolute(text: string): string {
     const numericValue = parseFloat(text);
-    if (isNaN(numericValue)) {
-        return text; // 如果文本不能转换为数字，返回原文本
-    }
     return Math.abs(numericValue).toString();
 }
 /**
@@ -126,9 +99,6 @@ export function absolute(text: string): string {
  */
 export function power(text: string, exponent: number): string {
     const numericValue = parseFloat(text);
-    if (isNaN(numericValue) || typeof exponent !== 'number') {
-        return text; // 如果文本不能转换为数字或参数不合法，返回原文本
-    }
     return Math.pow(numericValue, exponent).toString();
 }
 
