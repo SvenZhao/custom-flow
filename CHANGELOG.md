@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.5](https://github.com/SvenZhao/custom-flow/compare/v0.0.4...v0.0.5) (2024-11-22)
+
+
+### Features
+
+* 默认配置 补充方法 ([64b6472](https://github.com/SvenZhao/custom-flow/commit/64b6472e8b3fc7cab4761984a41f8b1c36e4f1ed))
+* License ([e08f882](https://github.com/SvenZhao/custom-flow/commit/e08f882bd1ec7e43d9ec6d3391808aab889dfcff))
+
 ### [0.0.4](https://github.com/SvenZhao/custom-flow/compare/v0.0.3...v0.0.4) (2024-11-22)
 
 
