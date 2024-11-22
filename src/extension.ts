@@ -1,7 +1,6 @@
 import * as vscode from 'vscode';
 import { flow, get, find } from 'lodash';
 import operations from './operations';
-import { DEFAULT_OPERATIONS } from './configs';
 
 // 插件激活时调用的函数
 export function activate(context: vscode.ExtensionContext) {
@@ -117,7 +116,7 @@ function getUserOperations(): ICustomOperation[] {
 
   const operations = config.get<ICustomOperation[]>('operations') || [];
   // 返回配置的操作
-  return [...DEFAULT_OPERATIONS, ...operations].map(op => ({
+  return operations.map(op => ({
     ...op,
     steps: op.steps.map(step => ({
       name: step.name,
