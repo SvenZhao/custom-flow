@@ -199,7 +199,7 @@
     "pretest": "npm run compile-tests && npm run compile && npm run lint",
     "lint": "eslint src",
     "test": "vscode-test",
-    "docs": "typedoc --out docs/ src/operations/*.ts",
+    "docs": "typedoc --out docs/ src/operations/*.ts --locale zh",
     "release": "standard-version",
     "publish": "npm run release && vsce publish"
   },
@@ -209,6 +209,7 @@
     "@types/vscode": "^1.50.0",
     "ts-loader": "^9.5.1",
     "typedoc": "^0.26.11",
+    "typedoc-plugin-localization": "^3.0.5",
     "typescript": "^5.6.3",
     "webpack": "^5.95.0",
     "webpack-cli": "^5.1.4"
