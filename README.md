@@ -17,22 +17,81 @@
 ### 示例配置
 
 ```json
-{
-  "customFlow.operations": [
+"customFlow.operations": {
+  "type": "array",
+  "description": "用户自定义操作流程的列表，每个操作包括一个名称和一系列步骤。",
+  "default": [
     {
-      "name": "Text Operations",
+      "name": "转换成大写",
       "steps": [
-        { "name": "uppercase", "params": {} },
-        { "name": "reverse", "params": {} }
+        {
+          "name": "toUpperCase",
+          "params": {}
+        }
       ]
     },
     {
-      "name": "Timestamp Operations",
+      "name": "默认可删除 乘3除2 到剪贴板",
       "steps": [
-        { "name": "getCurrentTimestampMillis", "params": {} },
-        { "name": "dateToTimestampMillis", "params": { "date": "2024-11-21" } },
-        { "name": "timestampMillisToDate", "params": { "timestamp": "1711173123000" } }
-      ]
+        {
+          "name": "divide",
+          "params": 3
+        },
+        {
+          "name": "multiply",
+          "params": 2
+        }
+      ],
+      "resultAction": "clipboard"
+    },
+    {
+      "name": "编码操作：Base64 编码解码",
+      "steps": [
+        {
+          "name": "base64encode",
+          "params": {}
+        },
+        {
+          "name": "base64decode",
+          "params": {}
+        }
+      ],
+      "resultAction": "replace"
+    },
+    {
+      "name": "日期转换：秒转毫秒",
+      "steps": [
+        {
+          "name": "dateToTimestamp",
+          "params": {
+            "unit": "s"
+          }
+        }
+      ],
+      "resultAction": "replace"
+    },
+    {
+      "name": "日期转换：时间戳（秒）转换为日期",
+      "steps": [
+        {
+          "name": "timestampToDate",
+          "params": {
+            "unit": "s",
+            "format": "YYYY-MM-DD"
+          }
+        }
+      ],
+      "resultAction": "replace"
+    },
+    {
+      "name": "字符串反转",
+      "steps": [
+        {
+          "name": "reverse",
+          "params": {}
+        }
+      ],
+      "resultAction": "replace"
     }
   ]
 }
