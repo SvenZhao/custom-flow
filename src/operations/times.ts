@@ -1,20 +1,7 @@
 import dayjs from 'dayjs';
+import { window } from 'vscode';
 
-/**
- * 获取当前时间戳（毫秒）
- * @returns 返回当前时间戳（毫秒）
- */
-export function getCurrentTimestampMillis(): string {
-    return dayjs().valueOf().toString(); // 返回当前时间戳（毫秒）
-}
 
-/**
- * 获取当前时间戳（秒）
- * @returns 返回当前时间戳（秒）
- */
-export function getCurrentTimestampSeconds(): string {
-    return dayjs().unix().toString(); // 返回当前时间戳（秒）
-}
 
 /**
  * 将日期字符串转换为时间戳（毫秒）
@@ -42,25 +29,11 @@ export function timestampMillisToDate(timestamp: string): string {
     }
 }
 
-/**
- * 将时间戳（秒）转换为日期字符串
- * @param timestamp 时间戳（秒）
- * @returns 返回对应的日期字符串，如果转换失败，返回原时间戳
- */
-export function timestampSecondsToDate(timestamp: string): string {
-    try {
-        return dayjs.unix(Number(timestamp)).format('YYYY-MM-DD HH:mm:ss'); // 将时间戳（秒）转换为日期
-    } catch (e) {
-        return timestamp; // 如果转换失败，返回原文本
-    }
-}
+
 
 // 操作集合
 export default {
-    getCurrentTimestampMillis,
-    getCurrentTimestampSeconds,
     dateToTimestampMillis,
     timestampMillisToDate,
-    timestampSecondsToDate,
 };
 

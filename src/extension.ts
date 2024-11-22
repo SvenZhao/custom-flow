@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { flow, get, find } from 'lodash';
 import operations from './operations';
+import { DEFAULT_OPERATIONS } from './configs';
 
 // 插件激活时调用的函数
 export function activate(context: vscode.ExtensionContext) {
@@ -98,7 +99,6 @@ async function handleResult(processedText: string, resultAction?: string) {
           editBuilder.replace(editor.selection, processedText);
         });
       }
-      vscode.window.showInformationMessage(`文本已替换。`);
   }
 }
 
@@ -110,10 +110,7 @@ interface ICustomOperation {
   resultAction?: string; // 结果动作：可以是 'clipboard' 或 'replace'
 }
 
-const DEFAULT_OPERATIONS = [
-  { "name": "URL编码", "steps": [{ "name": "urlencode", "params": {} }] },
-  { "name": "URL解码", "steps": [{ "name": "urldecode", "params": {} }] }
-];
+
 // 获取用户配置的操作
 function getUserOperations(): ICustomOperation[] {
   const config = vscode.workspace.getConfiguration('customFlow');
