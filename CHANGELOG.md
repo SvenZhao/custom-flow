@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.6](https://github.com/SvenZhao/custom-flow/compare/v0.0.5...v0.0.6) (2024-11-22)
+
+
+### Features
+
+* 补充mockjs ([d8d5f2e](https://github.com/SvenZhao/custom-flow/commit/d8d5f2ea5affca09c8fe8265caed386fa2076a56))
+* 加入选中文案 ([4603f2b](https://github.com/SvenZhao/custom-flow/commit/4603f2b34f3e4b046667ed55dbea176240fa6495))
+* 文档 ([1ed2cf6](https://github.com/SvenZhao/custom-flow/commit/1ed2cf6a436e923d220b73c0f887af2c03a29a23))
+
 ### [0.0.5](https://github.com/SvenZhao/custom-flow/compare/v0.0.4...v0.0.5) (2024-11-22)
 
 
