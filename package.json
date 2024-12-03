@@ -49,6 +49,12 @@
               "resultAction": "replace"
             },
             {
+              "name": "sting：/** */注释",
+              "steps": [
+                { "name": "replace", "params": { "search": "^(.*)$", "replacement": "/** $1 */" } }
+              ]
+            },
+            {
               "name": "sting:转换成大写",
               "steps": [
                 {

@@ -133,6 +133,14 @@ interface ICustomOperation {
 function getUserOperations(): ICustomOperation[] {
   const config = vscode.workspace.getConfiguration('customFlow');
   const operations = config.get<ICustomOperation[]>('operations') || [];
+  operations.sort((a, b) => {
+    const nameA = a.name.toLowerCase(); // 将 name 转为小写以确保不受大小写影响
+    const nameB = b.name.toLowerCase();
+    // 返回负数表示 a 在 b 前面，正数表示 b 在 a 前面
+    if (nameA < nameB) return -1;
+    if (nameA > nameB) return 1;
+    return 0; // 如果相等
+  });
   // 返回配置的操作
   return operations.map(op => ({
     /**默认需要选中 */

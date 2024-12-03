@@ -50,16 +50,42 @@ export function repeat(text: string, params: { count: number }): string {
 
 /**
  * 替换文本中的指定内容
+ * 此函数支持用户输入的字符串形式的搜索内容，并自动解析是否为正则表达式。
+ *
  * @param text 输入文本
- * @param params 替换参数 { search: string | RegExp, replacement: string }
+ * @param params 替换参数
+ * @param params.search 搜索内容，字符串形式。如果格式为 `/pattern/flags`，会自动解析为正则表达式。
+ * @param params.replacement 替换内容，支持正则捕获组（如 `$1`, `$2`）。
  * @returns 返回替换后的文本
+ *
+ * @example
+ * // 字符串替换
+ * replace("Hello, World!", { search: "World", replacement: "TypeScript" })
+ * // => "Hello, TypeScript!"
+ *
+ * @example
+ * // 正则替换，将文本包裹成{{}}
+ * replace("Hello, World!", { search: "/^(.*)$/", replacement: "{{$1}}" })
+ * // => "{{Hello, World!}}"
  */
 export function replace(
     text: string,
-    params: { search: string | RegExp; replacement: string }
+    params: { search: string; replacement: string }
 ): string {
     const { search, replacement } = params;
-    return text.replace(search, replacement);
+    let searchPattern: string | RegExp;
+
+    // 判断 search 是否是正则格式 /pattern/flags
+    if (/^\/.*\/[gimsuy]*$/.test(search)) {
+        // 提取正则内容和标志位
+        const [, pattern, flags] = search.match(/^\/(.*)\/([gimsuy]*)$/) || [];
+        searchPattern = new RegExp(pattern, flags); // 转换为 RegExp 对象
+    } else {
+        // 普通字符串匹配
+        searchPattern = search;
+    }
+
+    return text.replace(searchPattern, replacement);
 }
 
 /**
@@ -91,7 +117,6 @@ export function startsWith(text: string, params: { prefix: string }): boolean {
 export function endsWith(text: string, params: { suffix: string }): boolean {
     return text.endsWith(params.suffix);
 }
-
 
 export default {
     toUpperCase,
