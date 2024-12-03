@@ -4,7 +4,7 @@
   "description": "一个允许用户自定义操作流，流式处理文本的 VSCode 插件。",
   "publisher": "svenzhao",
   "icon": "images/logo.png",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "engines": {
     "vscode": "^1.50.0"
   },
@@ -51,7 +51,13 @@
             {
               "name": "sting：/** */注释",
               "steps": [
-                { "name": "replace", "params": { "search": "^(.*)$", "replacement": "/** $1 */" } }
+                {
+                  "name": "replace",
+                  "params": {
+                    "search": "^(.*)$",
+                    "replacement": "/** $1 */"
+                  }
+                }
               ]
             },
             {
