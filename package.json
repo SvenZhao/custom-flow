@@ -211,7 +211,7 @@
     "pretest": "npm run compile-tests && npm run compile && npm run lint",
     "lint": "eslint src",
     "test": "vscode-test",
-    "docs": "typedoc --out docs/ src/operations/*.ts --locale zh",
+    "docs": "typedoc --out docs/ src/operations/*.ts",
     "release": "standard-version",
     "publish": "npm run release && vsce publish"
   },
